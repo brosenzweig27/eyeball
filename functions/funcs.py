@@ -6,8 +6,8 @@ import os
 import torch.nn as nn
 import matplotlib.pyplot as plt
 import hashlib
-from classifiers3x3 import c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13
-from feedback import KMeansSegmentation, VectorSegmenter, HyperplaneSegmentation
+from functions.classifiers3x3 import c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13
+from functions.feedback import KMeansSegmentation, VectorSegmenter, HyperplaneSegmentation
 
 #############################################################################
 #############################################################################
