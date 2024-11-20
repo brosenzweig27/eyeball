@@ -251,17 +251,19 @@ def new_kmeans_step(data:pd.DataFrame, image:int, kmeans_amps:list[int], k:int,
     row_sums, num_agg = sum_rows(binarized, k = 5, w = 24, h = 24)
 
     kmeans_output = row_sums + kmeans_amps
-    kmeans_output_binary = (kmeans_output > 5).astype(int)
+    # kmeans_output_binary = (kmeans_output > 5).astype(int)
 
-    kmeans_section = kmeans_segmenter.assign_segment(kmeans_output_binary)
+    kmeans_section = kmeans_segmenter.assign_segment(kmeans_output)
 
     if kmeans_section == real:
         print(f"kmeans match: guess = {kmeans_section} , actual = {real}")
-        kmeans_amps[row_sums > 0] += 1
+        adjustment = kmeans_segmenter.move_closer(vector=row_sums, closest=kmeans_section, alpha=.5)
+        # print(adjustment)
+        kmeans_amps[row_sums > 0] += adjustment[row_sums > 0]
         kmeans_correct = 1
     else: 
         print(f"kmeans no match: guess = {kmeans_section} , actual = {real}")
-        kmeans_amps[row_sums == 0] = np.round(kmeans_amps[row_sums == 0] / 1.5, 1)
+        kmeans_amps[row_sums == 0] = np.round(kmeans_amps[row_sums == 0] / 1, 1)
         kmeans_correct = 0
 
     return kmeans_amps, kmeans_correct

@@ -15,6 +15,11 @@ class SegmentationStrategy(ABC):
         """Assign a new vector to a segment based on the strategy."""
         pass
 
+    @abstractmethod
+    def move_closer(self, vector, closest, alpha):
+        """Get a vector that will move the input closest to center."""
+        pass
+
 # Strategy 1: KMeans Clustering
 class KMeansSegmentation(SegmentationStrategy):
     def __init__(self, num_sections=11):
@@ -25,6 +30,15 @@ class KMeansSegmentation(SegmentationStrategy):
         """Train KMeans on the sample vectors to create num_sections clusters."""
         self.kmeans = KMeans(n_clusters=self.num_sections, random_state=42, n_init=10, max_iter=300)
         self.kmeans.fit(vectors)
+
+    def move_closer(self, vector, closest, alpha):
+        # vector = np.array(vector).reshape(1, -1)
+        center = self.kmeans.cluster_centers_[closest]
+        # print(vector)
+        # print(center)
+        adj = alpha * (center - vector)
+        # print(adj)
+        return adj
 
     def assign_segment(self, vector):
         """Assign the vector to the nearest KMeans cluster center."""
@@ -53,6 +67,12 @@ class HyperplaneSegmentation(SegmentationStrategy):
             segment += np.searchsorted(self.thresholds[:, i], val, side='right') - 1
         # Use modulo operation to return a segment label between 0 and num_sections - 1
         return segment % self.num_sections
+    
+    def move_closer(self, vector, closest, alpha):
+        vector = np.array(vector).reshape(1, -1)
+        center = self.kmeans.cluster_centers_[closest]
+        adj = alpha * (center - vector)
+        return adj
 
 # Context Class for Segmentation
 class VectorSegmenter:
@@ -66,7 +86,12 @@ class VectorSegmenter:
     def fit(self, vectors):
         """Fit the strategy with the given vectors (if required)."""
         self.strategy.fit(vectors)
+
+    def move_closer(self, vector, closest, alpha):
+        """Get a vector that will move the input closest to center."""
+        return self.strategy.move_closer(vector, closest, alpha)
     
     def assign_segment(self, vector):
         """Assign a segment to the vector using the current strategy."""
         return self.strategy.assign_segment(vector)
+
