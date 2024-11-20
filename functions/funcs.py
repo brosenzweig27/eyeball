@@ -5,7 +5,6 @@ import torch
 import os
 import torch.nn as nn
 import matplotlib.pyplot as plt
-import hashlib
 from functions.classifiers3x3 import c0, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13
 from functions.feedback import KMeansSegmentation, VectorSegmenter, HyperplaneSegmentation
 
@@ -167,30 +166,6 @@ def row_agg(binary_matrix:np.array, n:int=784, k:int=3, w:int=28, h:int = 28):
     # Flatten the matrix to create a 392-length vector, representing all of the different aggregation points
     result_vector = block_sums.flatten()
     return(result_vector)
-
-#############################################################################
-#############################################################################
-"""
-    Hashes result_vector + amplifier sum into one of n sections, returning the section.
-    
-    Parameters:
-    - vector: list, the input vector to be hashed and categorized
-    - num_sections: int, the number of distinct possible categories
-
-    Returns:
-    - section: int, the distinct section that vector was mapped into
-"""
-
-def hash(vector:list, num_sections:int=15):
-    # Convert the vector to a hashable string
-    vector_str = ''.join(map(str, vector))
-
-    hash_object = hashlib.sha256(vector_str.encode())
-    hash_int = int(hash_object.hexdigest(), 16)
-
-    # Map the hash to one of the sections
-    section = (hash_int % num_sections)
-    return section
 
     
 #############################################################################
