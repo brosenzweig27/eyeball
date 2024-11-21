@@ -21,3 +21,15 @@ Version 0 of this model (found in numdet.ipynb) analyzes the 28x28 pixel greysca
 14. Dark horizontal bar on the bottom
 
 I am too lazy to write the rest of this ReadMe so understanding the rest of this code is left as an exercise to the reader. It should be noted that the 3x3 sensors alone do an incredibly terrible job of classifying the numbers but I'm hopeful, largely bc I'm delusional. I'm working on adding 5x5 sensors rn so stay tuned...
+
+### Update: 5x5 training up and running in train_5x5.ipynb
+The function 'bars' in classifierskxk.py has some crazy statements that honestly I'm super proud of.
+
+The 5x5 eyeball is still really bad but seems slightly better than the 3x3 after very minimal training and experimentation. When training on 250 images it got to a steady 12% accurate classifications which is notably better than random 💪. 
+
+The critical variables that effect the outcome of the 5x5 training are:
+- **num_sections**, in kmeans_segmenter: this is the number of clusters the space of possible output vectors can get sectioned into. Now if you're a normal person (congrats) it would make sense for this to = 11 (one for each number 0-9, and one for other), but I happen to be a dreamer (delusional) and think that this eyeball has potential to classify far more than just numbers. Theoretically, num_sections can be as large as 2<sup>336</sup> (where 336 is the output space, assuming the output vector is binary which I'm now realizing it isn't but close enough) in which case it could classify literally anything. The downside of starting with large num_sections is that if the default output vector (probably just zeros) happens to randomly fall into a region above 10 then the model will never train bc it will never happen to be correct which it needs to do in order to start learning.
+- **num_train**: this is the number of unique images the model will train on.
+- **num_iters**: this is basically the number of training epochs, which multiplied with num_train gives you the total training steps.
+- **alpha**, in new_kmeans_step: this is how much the amplification vector (don't get me started on the amplification vector) gets moved towards the center of the cluster that the output vector was correctly classified as (don't worry about it, tbh).
+- **the demoninator in the else statement of that function**: this incredibly obvious and important variable determines how much to discount activated sensors cells in the amplification vector when the output is *incorrectly* classified. Currently set to 1 because nothing was happening and I was getting frustrated...
