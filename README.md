@@ -4,7 +4,7 @@ The eyeball<sup>(TM)</sup> is an absolutely terrible method for the pretty basic
 ## Premise
 From what I remember from the two neuroscience classes I took in undergrad, human vision works bc we have a bunch of cells / clusters of cells that are activated by very specific types of inputs. For example, certain cells directly downstream of receptor cells in the retina activate only when dark bar of a specific orientation is passed over the field of vision (source: I vaguely remember this from undergrad). I thought this would be an interesting jumping-off point for a new species of computer vision models that essentially are comprised of a bunch of individual sensors that serve one specific function.
 
-Version 0 of this model (found in numdet.ipynb) analyzes the 28x28 pixel greyscale images of handwritten numbers of the MNIST training set (found in digit-recognizer/train.csv) through a collection of 14 distinct sensor types. Each distint 3x3 region of the image is assigned each of the following 14 types of sensors, resulting in a length 9464 binary vector (1 if the corresponding sensor is activated, 0 if not):
+Version 0 of this model (found in train_3x3.ipynb) analyzes the 28x28 pixel greyscale images of handwritten numbers of the MNIST training set (found in digit-recognizer/train.csv) through a collection of 14 distinct sensor types. Each distint 3x3 region of the image is assigned each of the following 14 types of sensors, resulting in a length 9464 binary vector (1 if the corresponding sensor is activated, 0 if not):
 1. Empty
 2. Full
 3. Dark vertical bar on the left
