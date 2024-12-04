@@ -267,5 +267,3 @@ def new_kmeans_step(data:pd.DataFrame, image:int, kmeans_amps:list[int], k:int,
         kmeans_correct = 0
 
     return kmeans_amps, kmeans_correct
-
-    
